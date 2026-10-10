@@ -939,15 +939,19 @@
       const element =
         document.createElement("div");
 
-      element.className =
-        "falling-item " +
-        (isChestnut ? "chestnut" : "acorn");
+     element.className =
+"falling-item " +
+(isChestnut ? "chestnut" : "acorn");
 
-  if (isChestnut) {
+if (isChestnut) {
+
     element.textContent = "🌰";
+
 } else {
-    element.innerHTML =
+
+element.innerHTML =
       'acorn.png';
+
 }
 
       const itemSize = 38;
