@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <title>이화다람쥐의 도토리 대작전</title>
+
+  <style>
+    :root {
+      --brown-dark: #5b3525;
+      --brown: #8b5a3c;
+      --green-dark: #2f6f3e;
+      --green: #69a953;
+      --cream: #fff8e7;
+      --yellow: #ffd56a;
+      --red: #d95757;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      overscroll-behavior: none;
+    }
+
+    body {
+      font-family:
+        "Pretendard",
+        "Apple SD Gothic Neo",
+        "Malgun Gothic",
+        Arial,
+        sans-serif;
+
+      color: var(--brown-dark);
+      background:
+        linear-gradient(
+          180deg,
+          #dff4ff 0%,
+          #f9f3d5 55%,
+          #a9d47f 100%
+        );
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 14px;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .game-shell {
+      width: min(100%, 520px);
+      background: rgba(255, 255, 255, 0.95);
+      border: 3px solid rgba(91, 53, 37, 0.18);
+      border-radius: 26px;
+      padding: 16px;
+      box-shadow: 0 18px 50px rgba(52, 82, 50, 0.22);
+    }
+
+    .title {
+      margin: 2px 0 4px;
+      text-align: center;
+      font-size: clamp(1.45rem, 6vw, 2.05rem);
+      color: var(--brown-dark);
+    }
+
+    .subtitle {
+      margin: 0 0 14px;
+      text-align: center;
+      color: #765544;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .difficulty-panel {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .difficulty-label {
+      text-align: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+
+    .difficulty-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .difficulty-button {
+      border: 2px solid #d6c3a8;
+      border-radius: 14px;
+      background: #fffaf0;
+      color: var(--brown-dark);
+      padding: 11px 6px;
+      cursor: pointer;
+      font-weight: 800;
+      transition:
+        transform 0.15s,
+        background 0.15s,
+        border-color 0.15s;
+    }
+
+    .difficulty-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .difficulty-button.selected {
+      color: var(--white);
+      background: var(--green-dark);
+      border-color: var(--green-dark);
+      box-shadow: 0 5px 14px rgba(47, 111, 62, 0.25);
+    }
+
+    .status-board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .status-card {
+      min-width: 0;
+      padding: 9px 5px;
+      background: var(--cream);
+      border: 1px solid #ead9bb;
+      border-radius: 13px;
+      text-align: center;
+    }
+
+    .status-name {
+      display: block;
+      margin-bottom: 3px;
+      color: #816957;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .status-value {
+      display: block;
+      font-size: 1rem;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .goal-wrap {
+      margin-bottom: 10px;
+    }
+
+    .goal-text {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .goal-bar {
+      height: 13px;
+      overflow: hidden;
+      border: 1px solid #d9c39c;
+      border-radius: 999px;
+      background: #f0e4ca;
+    }
+
+    .goal-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background:
+        linear-gradient(
+          90deg,
+          #69a953,
+          #ffd56a,
+          #d58a43
+        );
+      transition: width 0.2s;
+    }
+
+    .game-area {
+      position: relative;
+      width: 100%;
+      height: min(62vh, 590px);
+      min-height: 390px;
+      overflow: hidden;
+      border: 3px solid #8cb37c;
+      border-radius: 22px;
+      background:
+        radial-gradient(
+          circle at 16% 12%,
+          rgba(255, 255, 255, 0.9) 0 6%,
+          transparent 6.5%
+        ),
+        radial-gradient(
+          circle at 30% 13%,
+          rgba(255, 255, 255, 0.85) 0 9%,
+          transparent 9.5%
+        ),
+        radial-gradient(
+          circle at 82% 20%,
+          rgba(255, 255, 255, 0.8) 0 8%,
+          transparent 8.5%
+        ),
+        linear-gradient(
+          180deg,
+          #aee2ff 0%,
+          #eaf8ff 66%,
+          #a5d67d 66%,
+          #71ae58 100%
+        );
+
+      touch-action: none;
+      user-select: none;
+    }
+
+    .sun {
+      position: absolute;
+      top: 22px;
+      right: 25px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #ffe77d;
+      box-shadow: 0 0 24px rgba(255, 219, 99, 0.82);
+    }
+
+    .tree {
+      position: absolute;
+      bottom: 49px;
+      width: 13px;
+      height: 100px;
+      border-radius: 8px;
+      background: #76503b;
+      opacity: 0.72;
+    }
+
+    .tree::before {
+      content: "";
+      position: absolute;
+      width: 74px;
+      height: 74px;
+      left: 50%;
+      top: -34px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: #4b9951;
+      box-shadow:
+        -29px 17px 0 #5aa85e,
+        29px 16px 0 #438b49;
+    }
+
+    .tree-left {
+      left: 28px;
+    }
+
+    .tree-right {
+      right: 28px;
+      transform: scale(0.85);
+    }
+
+    .ground {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 53px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          #568d43 0 16px,
+          #659d4c 16px 32px
+        );
+      border-top: 3px solid rgba(67, 124, 56, 0.5);
+    }
+
+    .player {
+      position: absolute;
+      left: 50%;
+      bottom: 26px;
+      width: 96px;
+      height: 100px;
+      z-index: 10;
+      transform: translateX(-50%);
+      transition: filter 0.12s;
+      pointer-events: none;
+    }
+
+    .player.hit {
+      filter:
+        drop-shadow(0 0 10px #dc3131)
+        saturate(1.7);
+    }
+
+    .squirrel {
+      position: absolute;
+      left: 22px;
+      bottom: 6px;
+      font-size: 55px;
+      line-height: 1;
+      filter: drop-shadow(0 4px 2px rgba(0, 0, 0, 0.14));
+    }
+
+    .basket {
+      position: absolute;
+      left: 1px;
+      bottom: 0;
+      width: 94px;
+      height: 36px;
+      border: 4px solid #6b3f28;
+      border-radius: 7px 7px 24px 24px;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          #bc794e 0 8px,
+          #d79560 8px 16px
+        );
+      box-shadow: 0 5px 7px rgba(75, 46, 27, 0.22);
+    }
+
+    .basket::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      top: -24px;
+      width: 43px;
+      height: 31px;
+      border: 4px solid #6b3f28;
+      border-bottom: 0;
+      border-radius: 28px 28px 0 0;
+    }
+
+    .falling-item {
+      position: absolute;
+      z-index: 7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 38px;
+      height: 38px;
+      font-size: 31px;
+      line-height: 1;
+      filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.2));
+      pointer-events: none;
+      will-change: transform, top;
+    }
+
+    .falling-item.acorn {
+      animation: itemSpin 0.9s linear infinite;
+    }
+
+    .falling-item.chestnut {
+      animation: itemWobble 0.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes itemSpin {
+      from {
+        transform: rotate(-12deg);
+      }
+
+      to {
+        transform: rotate(348deg);
+      }
+    }
+
+    @keyframes itemWobble {
+      from {
+        transform: rotate(-12deg);
+      }
+
+      to {
+        transform: rotate(12deg);
+      }
+    }
+
+    .floating-score {
+      position: absolute;
+      z-index: 30;
+      font-size: 1.25rem;
+      font-weight: 900;
+      pointer-events: none;
+      animation: scoreFloat 0.7s ease-out forwards;
+    }
+
+    .floating-score.plus {
+      color: #287936;
+    }
+
+    .floating-score.minus {
+      color: var(--red);
+    }
+
+    @keyframes scoreFloat {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(0.85);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-55px) scale(1.25);
+      }
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 25px;
+      text-align: center;
+      background: rgba(250, 250, 238, 0.9);
+      backdrop-filter: blur(4px);
+    }
+
+    .screen.hidden {
+      display: none;
+    }
+
+    .screen-icon {
+      margin-bottom: 8px;
+      font-size: 4rem;
+      line-height: 1;
+    }
+
+    .screen h2 {
+      margin: 4px 0 10px;
+      color: var(--brown-dark);
+      font-size: 1.75rem;
+    }
+
+    .screen p {
+      margin: 4px 0;
+      max-width: 350px;
+      line-height: 1.6;
+    }
+
+    .primary-button {
+      min-width: 175px;
+      margin-top: 18px;
+      padding: 13px 22px;
+      border: 0;
+      border-radius: 999px;
+      color: var(--white);
+      background: var(--green-dark);
+      box-shadow: 0 7px 17px rgba(47, 111, 62, 0.25);
+      font-size: 1.02rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .primary-button:active {
+      transform: scale(0.97);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .control-button {
+      min-height: 54px;
+      border: 0;
+      border-radius: 15px;
+      color: var(--white);
+      background: var(--brown);
+      box-shadow: 0 5px 10px rgba(91, 53, 37, 0.2);
+      font-size: 1.55rem;
+      font-weight: 900;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .control-button:active,
+    .control-button.active {
+      transform: translateY(2px);
+      background: #68402e;
+      box-shadow: 0 2px 5px rgba(91, 53, 37, 0.22);
+    }
+
+    .instructions {
+      margin: 11px 0 0;
+      text-align: center;
+      color: #785f51;
+      font-size: 0.79rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 420px) {
+      body {
+        padding: 7px;
+      }
+
+      .game-shell {
+        padding: 11px;
+        border-radius: 20px;
+      }
+
+      .subtitle {
+        font-size: 0.82rem;
+      }
+
+      .game-area {
+        height: 59vh;
+        min-height: 390px;
+      }
+
+      .difficulty-button {
+        padding: 9px 4px;
+        font-size: 0.88rem;
+      }
+
+      .status-value {
+        font-size: 0.88rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="game-shell">
+
+    <h1 class="title">🐿️ 이화다람쥐의 도토리 대작전</h1>
+
+    <p class="subtitle">
+      도토리 50개를 바구니에 담으세요!<br>
+      밤을 받으면 점수가 1점 깎여요 🌰
+    </p>
+
+    <section class="difficulty-panel" aria-label="난이도 선택">
+
+      <div class="difficulty-label">
+        난이도를 선택하세요
+      </div>
+
+      <div class="difficulty-buttons">
+
+        <button
+          type="button"
+          class="difficulty-button"
+          data-level="easy"
+        >
+          하<br>
+          <small>천천히</small>
+        </button>
+
+        <button
+          type="button"
+          class="difficulty-button selected"
+          data-level="normal"
+        >
+          중<br>
+          <small>보통 속도</small>
+        </button>
+
+        <button
+          type="button"
+          class="difficulty-button"
+          data-level="hard"
+        >
+          상<br>
+          <small>빠르게</small>
+        </button>
+
+      </div>
+
+    </section>
+
+    <section class="status-board">
+
+      <div class="status-card">
+        <span class="status-name">도토리</span>
+        <span class="status-value" id="scoreValue">0 / 50</span>
+      </div>
+
+      <div class="status-card">
+        <span class="status-name">난이도</span>
+        <span class="status-value" id="levelValue">중</span>
+      </div>
+
+      <div class="status-card">
+        <span class="status-name">플레이 시간</span>
+        <span class="status-value" id="timeValue">0.0초</span>
+      </div>
+
+    </section>
+
+    <section class="goal-wrap">
+
+      <div class="goal-text">
+        <span>목표 달성도</span>
+        <span id="goalPercent">0%</span>
+      </div>
+
+      <div class="goal-bar">
+        <div class="goal-fill" id="goalFill"></div>
+      </div>
+
+    </section>
+
+    <section
+      class="game-area"
+      id="gameArea"
+      aria-label="게임 화면"
+    >
+
+      <div class="sun"></div>
+
+      <div class="tree tree-left"></div>
+      <div class="tree tree-right"></div>
+
+      <div class="ground"></div>
+
+      <div class="player" id="player">
+        <div class="squirrel">🐿️</div>
+        <div class="basket"></div>
+      </div>
+
+      <div class="screen" id="startScreen">
+
+        <div class="screen-icon">🐿️🥜</div>
+
+        <h2>도토리를 모아주세요!</h2>
+
+        <p>
+          도토리를 받으면 <strong>+1점</strong>
+        </p>
+
+        <p>
+          밤을 받으면 <strong>-1점</strong>
+        </p>
+
+        <p>
+          도토리 50개를 모으면 성공입니다.
+        </p>
+
+        <button
+          type="button"
+          class="primary-button"
+          id="startButton"
+        >
+          게임 시작
+        </button>
+
+      </div>
+
+      <div class="screen hidden" id="resultScreen">
+
+        <div class="screen-icon">🎉🐿️🎉</div>
+
+        <h2>도토리 50개 성공!</h2>
+
+        <p id="resultMessage"></p>
+
+        <p id="bestMessage"></p>
+
+        <button
+          type="button"
+          class="primary-button"
+          id="restartButton"
+        >
+          다시 도전하기
+        </button>
+
+      </div>
+
+    </section>
+
+    <section class="controls" aria-label="이동 버튼">
+
+      <button
+        type="button"
+        class="control-button"
+        id="leftButton"
+        aria-label="왼쪽으로 이동"
+      >
+        ◀
+      </button>
+
+      <button
+        type="button"
+        class="control-button"
+        id="rightButton"
+        aria-label="오른쪽으로 이동"
+      >
+        ▶
+      </button>
+
+    </section>
+
+    <p class="instructions">
+      PC: ← → 또는 A/D 키 · 모바일: 버튼 또는 게임 화면 드래그
+    </p>
+
+  </main>
+
+  <script>
+    "use strict";
+
+    const TARGET_SCORE = 50;
+
+    const difficultySettings = {
+      easy: {
+        label: "하",
+        minSpeed: 110,
+        maxSpeed: 155,
+        spawnInterval: 850,
+        chestnutChance: 0.22
+      },
+
+      normal: {
+        label: "중",
+        minSpeed: 175,
+        maxSpeed: 235,
+        spawnInterval: 620,
+        chestnutChance: 0.30
+      },
+
+      hard: {
+        label: "상",
+        minSpeed: 260,
+        maxSpeed: 350,
+        spawnInterval: 420,
+        chestnutChance: 0.38
+      }
+    };
+
+    const gameArea = document.getElementById("gameArea");
+    const player = document.getElementById("player");
+
+    const scoreValue = document.getElementById("scoreValue");
+    const levelValue = document.getElementById("levelValue");
+    const timeValue = document.getElementById("timeValue");
+
+    const goalFill = document.getElementById("goalFill");
+    const goalPercent = document.getElementById("goalPercent");
+
+    const startScreen = document.getElementById("startScreen");
+    const resultScreen = document.getElementById("resultScreen");
+
+    const startButton = document.getElementById("startButton");
+    const restartButton = document.getElementById("restartButton");
+
+    const leftButton = document.getElementById("leftButton");
+    const rightButton = document.getElementById("rightButton");
+
+    const resultMessage = document.getElementById("resultMessage");
+    const bestMessage = document.getElementById("bestMessage");
+
+    const difficultyButtons =
+      document.querySelectorAll(".difficulty-button");
+
+    let selectedDifficulty = "normal";
+
+    let gameRunning = false;
+    let score = 0;
+
+    let playerX = 0;
+    let moveDirection = 0;
+
+    let lastFrameTime = 0;
+    let lastSpawnTime = 0;
+    let startTime = 0;
+    let elapsedTime = 0;
+
+    let animationFrameId = null;
+    let fallingItems = [];
+
+    let dragging = false;
+
+    function normalizePlayerPosition() {
+      const areaWidth = gameArea.clientWidth;
+      const playerWidth = player.offsetWidth;
+
+      if (playerX === 0) {
+        playerX = (areaWidth - playerWidth) / 2;
+      }
+
+      playerX = Math.max(
+        0,
+        Math.min(areaWidth - playerWidth, playerX)
+      );
+
+      player.style.left = playerX + "px";
+      player.style.transform = "none";
+    }
+
+    function updateStatus() {
+      scoreValue.textContent =
+        `${score} / ${TARGET_SCORE}`;
+
+      levelValue.textContent =
+        difficultySettings[selectedDifficulty].label;
+
+      timeValue.textContent =
+        `${elapsedTime.toFixed(1)}초`;
+
+      const percent = Math.min(
+        100,
+        Math.round((score / TARGET_SCORE) * 100)
+      );
+
+      goalFill.style.width = percent + "%";
+      goalPercent.textContent = percent + "%";
+    }
+
+    function clearFallingItems() {
+      fallingItems.forEach((item) => {
+        item.element.remove();
+      });
+
+      fallingItems = [];
+    }
+
+    function resetGame() {
+      gameRunning = false;
+      score = 0;
+      elapsedTime = 0;
+      moveDirection = 0;
+
+      lastFrameTime = 0;
+      lastSpawnTime = 0;
+
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+
+      animationFrameId = null;
+
+      clearFallingItems();
+
+      playerX =
+        (gameArea.clientWidth - player.offsetWidth) / 2;
+
+      normalizePlayerPosition();
+      updateStatus();
+    }
+
+    function startGame() {
+      resetGame();
+
+      startScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+
+      difficultyButtons.forEach((button) => {
+        button.disabled = true;
+      });
+
+      gameRunning = true;
+
+      startTime = performance.now();
+      lastFrameTime = startTime;
+      lastSpawnTime = startTime;
+
+      animationFrameId =
+        requestAnimationFrame(gameLoop);
+    }
+
+    function endGame() {
+      gameRunning = false;
+
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+
+      animationFrameId = null;
+
+      const finalTime = elapsedTime.toFixed(1);
+      const storageKey =
+        `acornGameBest_${selectedDifficulty}`;
+
+      const previousBest =
+        Number(localStorage.getItem(storageKey));
+
+      let isNewRecord = false;
+
+      if (
+        !previousBest ||
+        elapsedTime < previousBest
+      ) {
+        localStorage.setItem(
+          storageKey,
+          elapsedTime.toString()
+        );
+
+        isNewRecord = true;
+      }
+
+      const bestTime = isNewRecord
+        ? elapsedTime
+        : previousBest;
+
+      resultMessage.textContent =
+        `${difficultySettings[selectedDifficulty].label} 난이도를 ${finalTime}초 만에 성공했어요!`;
+
+      if (isNewRecord) {
+        bestMessage.textContent =
+          `🏆 새로운 최고 기록: ${finalTime}초`;
+      } else {
+        bestMessage.textContent =
+          `최고 기록: ${bestTime.toFixed(1)}초`;
+      }
+
+      resultScreen.classList.remove("hidden");
+
+      difficultyButtons.forEach((button) => {
+        button.disabled = false;
+      });
+    }
+
+    function createFallingItem() {
+      const settings =
+        difficultySettings[selectedDifficulty];
+
+      const isChestnut =
+        Math.random() < settings.chestnutChance;
+
+      const element =
+        document.createElement("div");
+
+      element.className =
+        "falling-item " +
+        (isChestnut ? "chestnut" : "acorn");
+
+      element.textContent =
+        isChestnut ? "🌰" : "🥜";
+
+      const itemSize = 38;
+      const maxX =
+        gameArea.clientWidth - itemSize;
+
+      const x = Math.random() * maxX;
+
+      const speed =
+        settings.minSpeed +
+        Math.random() *
+        (settings.maxSpeed - settings.minSpeed);
+
+      element.style.left = x + "px";
+      element.style.top = "-45px";
+
+      gameArea.appendChild(element);
+
+      fallingItems.push({
+        element,
+        type: isChestnut
+          ? "chestnut"
+          : "acorn",
+        x,
+        y: -45,
+        width: itemSize,
+        height: itemSize,
+        speed
+      });
+    }
+
+    function rectanglesOverlap(a, b) {
+      return (
+        a.left < b.right &&
+        a.right > b.left &&
+        a.top < b.bottom &&
+        a.bottom > b.top
+      );
+    }
+
+    function showFloatingScore(
+      text,
+      x,
+      y,
+      type
+    ) {
+      const floatingText =
+        document.createElement("div");
+
+      floatingText.className =
+        `floating-score ${type}`;
+
+      floatingText.textContent = text;
+      floatingText.style.left = x + "px";
+      floatingText.style.top = y + "px";
+
+      gameArea.appendChild(floatingText);
+
+      setTimeout(() => {
+        floatingText.remove();
+      }, 720);
+    }
+
+    function registerCatch(item) {
+      if (item.type === "acorn") {
+        score += 1;
+
+        showFloatingScore(
+          "+1",
+          item.x,
+          item.y,
+          "plus"
+        );
+      } else {
+        score = Math.max(0, score - 1);
+
+        showFloatingScore(
+          "-1",
+          item.x,
+          item.y,
+          "minus"
+        );
+
+        player.classList.add("hit");
+
+        setTimeout(() => {
+          player.classList.remove("hit");
+        }, 180);
+      }
+
+      updateStatus();
+
+      if (score >= TARGET_SCORE) {
+        endGame();
+      }
+    }
+
+    function updatePlayer(deltaSeconds) {
+      const playerSpeed = 340;
+
+      playerX +=
+        moveDirection *
+        playerSpeed *
+        deltaSeconds;
+
+      normalizePlayerPosition();
+    }
+
+    function updateItems(deltaSeconds) {
+      const playerRect =
+        player.getBoundingClientRect();
+
+      const basketHitbox = {
+        left: playerRect.left + 2,
+        right: playerRect.right - 2,
+        top: playerRect.bottom - 43,
+        bottom: playerRect.bottom - 2
+      };
+
+      const areaRect =
+        gameArea.getBoundingClientRect();
+
+      for (
+        let index = fallingItems.length - 1;
+        index >= 0;
+        index--
+      ) {
+        const item = fallingItems[index];
+
+        item.y += item.speed * deltaSeconds;
+        item.element.style.top = item.y + "px";
+
+        const itemRect = {
+          left:
+            areaRect.left +
+            item.x +
+            5,
+
+          right:
+            areaRect.left +
+            item.x +
+            item.width -
+            5,
+
+          top:
+            areaRect.top +
+            item.y +
+            5,
+
+          bottom:
+            areaRect.top +
+            item.y +
+            item.height -
+            3
+        };
+
+        if (
+          rectanglesOverlap(
+            itemRect,
+            basketHitbox
+          )
+        ) {
+          item.element.remove();
+          fallingItems.splice(index, 1);
+
+          registerCatch(item);
+
+          if (!gameRunning) {
+            return;
+          }
+
+          continue;
+        }
+
+        if (
+          item.y >
+          gameArea.clientHeight + 50
+        ) {
+          item.element.remove();
+          fallingItems.splice(index, 1);
+        }
+      }
+    }
+
+    function gameLoop(timestamp) {
+      if (!gameRunning) {
+        return;
+      }
+
+      const deltaMilliseconds =
+        Math.min(34, timestamp - lastFrameTime);
+
+      const deltaSeconds =
+        deltaMilliseconds / 1000;
+
+      lastFrameTime = timestamp;
+
+      elapsedTime =
+        (timestamp - startTime) / 1000;
+
+      const settings =
+        difficultySettings[selectedDifficulty];
+
+      if (
+        timestamp - lastSpawnTime >=
+        settings.spawnInterval
+      ) {
+        createFallingItem();
+        lastSpawnTime = timestamp;
+      }
+
+      updatePlayer(deltaSeconds);
+      updateItems(deltaSeconds);
+      updateStatus();
+
+      if (gameRunning) {
+        animationFrameId =
+          requestAnimationFrame(gameLoop);
+      }
+    }
+
+    function setDifficulty(level) {
+      if (gameRunning) {
+        return;
+      }
+
+      selectedDifficulty = level;
+
+      difficultyButtons.forEach((button) => {
+        button.classList.toggle(
+          "selected",
+          button.dataset.level === level
+        );
+      });
+
+      updateStatus();
+    }
+
+    function setMoveDirection(
+      direction,
+      button
+    ) {
+      moveDirection = direction;
+
+      if (button) {
+        button.classList.add("active");
+      }
+    }
+
+    function stopMovement(button) {
+      moveDirection = 0;
+
+      if (button) {
+        button.classList.remove("active");
+      }
+    }
+
+    difficultyButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        setDifficulty(button.dataset.level);
+      });
+    });
+
+    startButton.addEventListener(
+      "click",
+      startGame
+    );
+
+    restartButton.addEventListener(
+      "click",
+      startGame
+    );
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        if (
+          event.key === "ArrowLeft" ||
+          event.key.toLowerCase() === "a"
+        ) {
+          event.preventDefault();
+          moveDirection = -1;
+        }
+
+        if (
+          event.key === "ArrowRight" ||
+          event.key.toLowerCase() === "d"
+        ) {
+          event.preventDefault();
+          moveDirection = 1;
+        }
+
+        if (
+          event.key === " " &&
+          !gameRunning
+        ) {
+          event.preventDefault();
+          startGame();
+        }
+      }
+    );
+
+    document.addEventListener(
+      "keyup",
+      (event) => {
+        if (
+          event.key === "ArrowLeft" ||
+          event.key === "ArrowRight" ||
+          event.key.toLowerCase() === "a" ||
+          event.key.toLowerCase() === "d"
+        ) {
+          moveDirection = 0;
+        }
+      }
+    );
+
+    function addHoldControls(
+      button,
+      direction
+    ) {
+      button.addEventListener(
+        "pointerdown",
+        (event) => {
+          event.preventDefault();
+
+          setMoveDirection(
+            direction,
+            button
+          );
+
+          button.setPointerCapture(
+            event.pointerId
+          );
+        }
+      );
+
+      button.addEventListener(
+        "pointerup",
+        () => {
+          stopMovement(button);
+        }
+      );
+
+      button.addEventListener(
+        "pointercancel",
+        () => {
+          stopMovement(button);
+        }
+      );
+
+      button.addEventListener(
+        "pointerleave",
+        () => {
+          stopMovement(button);
+        }
+      );
+    }
+
+    addHoldControls(leftButton, -1);
+    addHoldControls(rightButton, 1);
+
+    gameArea.addEventListener(
+      "pointerdown",
+      (event) => {
+        if (!gameRunning) {
+          return;
+        }
+
+        dragging = true;
+
+        gameArea.setPointerCapture(
+          event.pointerId
+        );
+
+        movePlayerToPointer(event);
+      }
+    );
+
+    gameArea.addEventListener(
+      "pointermove",
+      (event) => {
+        if (
+          !gameRunning ||
+          !dragging
+        ) {
+          return;
+        }
+
+        movePlayerToPointer(event);
+      }
+    );
+
+    gameArea.addEventListener(
+      "pointerup",
+      () => {
+        dragging = false;
+      }
+    );
+
+    gameArea.addEventListener(
+      "pointercancel",
+      () => {
+        dragging = false;
+      }
+    );
+
+    function movePlayerToPointer(event) {
+      const areaRect =
+        gameArea.getBoundingClientRect();
+
+      const localX =
+        event.clientX - areaRect.left;
+
+      playerX =
+        localX -
+        player.offsetWidth / 2;
+
+      normalizePlayerPosition();
+    }
+
+    window.addEventListener(
+      "resize",
+      normalizePlayerPosition
+    );
+
+    resetGame();
+  </script>
+
+</body>
+</html>
