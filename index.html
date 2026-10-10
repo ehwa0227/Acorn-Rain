@@ -9,7 +9,7 @@
     maximum-scale=1.0, user-scalable=no"
   >
 
-  <title>🐿️ 이화 다람쥐의 도토리 모으기</title>
+  <title>🐿️ 이화의 도토리 줍줍 대작전</title>
 
   <style>
     * {
@@ -568,16 +568,6 @@
       line-height: 1;
     }
 
-    .start-acorn {
-      width: 80px;
-      height: 80px;
-
-      object-fit: contain;
-
-      filter:
-        drop-shadow(0 5px 4px rgba(0, 0, 0, 0.18));
-    }
-
     .screen h2 {
       margin: 6px 0 11px;
 
@@ -706,11 +696,11 @@
 
   <main class="game-wrapper">
 
-    <h1>🐿️ 이화 다람쥐의 도토리 모으기</h1>
+    <h1>🐿️ 이화의 도토리 줍줍 대작전</h1>
 
     <p class="description">
       도토리 50개를 바구니에 담으세요.<br>
-      밤은 감점, 단 한 번 떨어지는 이화의 사랑은 최종 치트키!
+      밤은 감점, 단 한 번 떨어지는 하트는 최종 치트키!
     </p>
 
     <div class="difficulty-title">
@@ -772,7 +762,7 @@
           class="status-value"
           id="difficultyValue"
         >
-          중
+          중 · 빠르게
         </span>
       </div>
 
@@ -828,9 +818,9 @@
         id="startScreen"
       >
 
-        🐿️
+        <div class="screen-icon">🐿️</div>
 
-        <h2>내 사랑 도토리 50개 모으기</h2>
+        <h2>도토리 50개 모으기</h2>
 
         <p>
           도토리를 받으면
@@ -843,7 +833,7 @@
         </p>
 
         <p class="heart-notice">
-          ❤️ 나의 사랑을 받으면 즉시 클리어!
+          ❤️ 하트를 받으면 즉시 클리어!
         </p>
 
         <button
@@ -926,11 +916,11 @@
       easy: {
         label: "하",
         description: "보통",
-        minimumSpeed: 180,
+        minimumSpeed: 200,
         maximumSpeed: 250,
         spawnInterval: 590,
         chestnutChance: 0.25,
-        heartSpeed: 205
+        heartSpeed: 250
       },
 
       normal: {
@@ -940,7 +930,7 @@
         maximumSpeed: 390,
         spawnInterval: 410,
         chestnutChance: 0.34,
-        heartSpeed: 310
+        heartSpeed: 380
       },
 
       hard: {
@@ -950,7 +940,7 @@
         maximumSpeed: 570,
         spawnInterval: 250,
         chestnutChance: 0.43,
-        heartSpeed: 445
+        heartSpeed: 520
       }
     };
 
@@ -1033,13 +1023,10 @@
     let animationFrameId = null;
 
     let fallingItems = [];
-
     let dragging = false;
 
     let heartHasAppeared = false;
     let heartDropTime = 0;
-
-    let clearedWithHeart = false;
 
     function updatePlayerPosition() {
       const maximumX =
@@ -1117,14 +1104,16 @@
       previousSpawnTime = 0;
 
       heartHasAppeared = false;
-      clearedWithHeart = false;
 
       /*
-        하트는 게임 시작 후
-        8초에서 18초 사이에 딱 한 번 등장
+        35,000ms = 35초
+        추가 무작위 시간은 최대 20,000ms = 20초
+
+        따라서 하트는 게임 시작 후
+        35초에서 55초 사이에 딱 한 번 등장합니다.
       */
       heartDropTime =
-        8000 + Math.random() * 10000;
+        35000 + Math.random() * 20000;
 
       if (animationFrameId !== null) {
         cancelAnimationFrame(
@@ -1171,7 +1160,6 @@
 
       gameRunning = false;
       movementDirection = 0;
-      clearedWithHeart = heartClear;
 
       if (animationFrameId !== null) {
         cancelAnimationFrame(
@@ -1184,10 +1172,11 @@
       removeAllItems();
 
       if (heartClear) {
-        resultIcon.textContent = "❤️🐿️❤️";
+        resultIcon.textContent =
+          "❤️🐿️❤️";
 
         resultTitle.textContent =
-          "하트 치트키 성공!";
+          "동호의 사랑 받기 성공!";
 
         resultMessage.textContent =
           "최종 치트키를 획득하여 즉시 클리어했습니다!";
@@ -1195,7 +1184,8 @@
         bestMessage.textContent =
           `하트를 ${elapsedTime.toFixed(1)}초 만에 잡았어요.`;
       } else {
-        resultIcon.textContent = "🎉🐿️🎉";
+        resultIcon.textContent =
+          "🎉🐿️🎉";
 
         resultTitle.textContent =
           "도토리 50개 성공!";
@@ -1394,6 +1384,7 @@
         styleName;
 
       effect.textContent = text;
+
       effect.style.left = x + "px";
       effect.style.top = y + "px";
 
@@ -1659,23 +1650,17 @@
       updateStatus();
     }
 
-    function beginMovement(
+    function startMovement(
       direction,
       button
     ) {
       movementDirection = direction;
-
-      button.classList.add(
-        "active"
-      );
+      button.classList.add("active");
     }
 
     function stopMovement(button) {
       movementDirection = 0;
-
-      button.classList.remove(
-        "active"
-      );
+      button.classList.remove("active");
     }
 
     function addMovementButton(
@@ -1691,7 +1676,7 @@
             event.pointerId
           );
 
-          beginMovement(
+          startMovement(
             direction,
             button
           );
@@ -1771,7 +1756,6 @@
           key === "a"
         ) {
           event.preventDefault();
-
           movementDirection = -1;
         }
 
@@ -1780,7 +1764,6 @@
           key === "d"
         ) {
           event.preventDefault();
-
           movementDirection = 1;
         }
 
@@ -1789,7 +1772,6 @@
           !gameRunning
         ) {
           event.preventDefault();
-
           startGame();
         }
       }
