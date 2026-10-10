@@ -2,12 +2,14 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    content="width=device-width, initial-scale=1.0,
+    maximum-scale=1.0, user-scalable=no"
   >
 
-  <title>다람쥐의 도토리 대작전</title>
+  <title>🐿️ 이화 다람쥐의 도토리 대작전</title>
 
   <style>
     * {
@@ -15,28 +17,36 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    html,
     body {
       margin: 0;
+      min-height: 100%;
+    }
+
+    body {
       min-height: 100vh;
-      padding: 12px;
+      padding: 10px;
+
       display: flex;
       justify-content: center;
       align-items: center;
+
       overflow-x: hidden;
 
       font-family:
         "Pretendard",
         "Apple SD Gothic Neo",
         "Malgun Gothic",
+        Arial,
         sans-serif;
 
-      color: #54351f;
+      color: #55351f;
 
       background:
         linear-gradient(
           135deg,
-          #fff8d8,
-          #dff3ce
+          #fff7d5,
+          #dcefcf
         );
     }
 
@@ -44,66 +54,82 @@
       font: inherit;
     }
 
-    .game-container {
-      width: min(100%, 520px);
-      padding: 16px;
+    .game-wrapper {
+      width: min(100%, 540px);
+      padding: 15px;
 
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.96);
+      border: 2px solid rgba(108, 74, 48, 0.13);
       border-radius: 24px;
 
       box-shadow:
-        0 18px 45px rgba(72, 97, 53, 0.22);
+        0 18px 48px rgba(57, 86, 44, 0.23);
     }
 
     h1 {
       margin: 2px 0 6px;
+
       text-align: center;
-      font-size: clamp(1.45rem, 6vw, 2rem);
       color: #704527;
+
+      font-size: clamp(1.45rem, 6vw, 2rem);
     }
 
     .description {
-      margin: 0 0 15px;
+      margin: 0 0 14px;
+
       text-align: center;
-      font-size: 0.9rem;
+      color: #80634d;
+
+      font-size: 0.88rem;
       line-height: 1.55;
-      color: #80644f;
     }
 
     .difficulty-title {
       margin-bottom: 8px;
+
       text-align: center;
       font-size: 0.92rem;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .difficulty-buttons {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 13px;
+      gap: 7px;
+
+      margin-bottom: 12px;
     }
 
     .difficulty-button {
-      padding: 10px 5px;
+      min-width: 0;
+      padding: 10px 4px;
 
-      border: 2px solid #d8c4a6;
+      border: 2px solid #dbc6a8;
       border-radius: 13px;
 
       background: #fffaf0;
-      color: #63422c;
+      color: #65452e;
 
-      font-weight: 800;
+      font-weight: 900;
       cursor: pointer;
     }
 
+    .difficulty-button small {
+      display: block;
+      margin-top: 2px;
+
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
     .difficulty-button.selected {
-      border-color: #4f8b43;
-      background: #4f8b43;
+      border-color: #4e8b42;
+      background: #4e8b42;
       color: white;
 
       box-shadow:
-        0 5px 12px rgba(79, 139, 67, 0.3);
+        0 5px 13px rgba(78, 139, 66, 0.28);
     }
 
     .difficulty-button:disabled {
@@ -115,51 +141,56 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 7px;
+
       margin-bottom: 10px;
     }
 
     .status-card {
       min-width: 0;
-      padding: 8px 4px;
+      padding: 8px 3px;
 
       text-align: center;
 
       background: #fff8df;
-      border: 1px solid #e5d4b5;
+      border: 1px solid #e6d5b5;
       border-radius: 12px;
     }
 
-    .status-name {
+    .status-label {
       display: block;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
 
-      color: #896e59;
-      font-size: 0.7rem;
-      font-weight: 700;
+      color: #876c55;
+
+      font-size: 0.68rem;
+      font-weight: 800;
     }
 
     .status-value {
       display: block;
-      font-size: 0.95rem;
+
+      font-size: 0.92rem;
       font-weight: 900;
     }
 
-    .progress-header {
+    .progress-heading {
       display: flex;
       justify-content: space-between;
+
       margin-bottom: 5px;
 
       font-size: 0.8rem;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .progress-bar {
       height: 13px;
       margin-bottom: 10px;
+
       overflow: hidden;
 
-      background: #efe1bf;
-      border: 1px solid #d8c18d;
+      background: #efe1c0;
+      border: 1px solid #d8c18f;
       border-radius: 999px;
     }
 
@@ -170,57 +201,57 @@
       background:
         linear-gradient(
           90deg,
-          #69a953,
-          #f2c94c,
-          #d78a3d
+          #62a550,
+          #f1c84a,
+          #d7853e
         );
 
-      transition: width 0.2s;
+      transition: width 0.18s;
     }
 
     .game-area {
       position: relative;
 
       width: 100%;
-      height: min(62vh, 590px);
-      min-height: 410px;
+      height: min(62vh, 600px);
+      min-height: 420px;
 
       overflow: hidden;
-      user-select: none;
       touch-action: none;
+      user-select: none;
 
-      border: 3px solid #82a96f;
+      border: 3px solid #82aa70;
       border-radius: 22px;
 
       background:
         radial-gradient(
-          circle at 20% 12%,
-          white 0 7%,
-          transparent 7.5%
+          circle at 16% 12%,
+          rgba(255, 255, 255, 0.95) 0 6%,
+          transparent 6.5%
         ),
         radial-gradient(
-          circle at 31% 13%,
-          rgba(255, 255, 255, 0.9) 0 10%,
-          transparent 10.5%
-        ),
-        radial-gradient(
-          circle at 80% 21%,
-          rgba(255, 255, 255, 0.85) 0 9%,
+          circle at 29% 13%,
+          rgba(255, 255, 255, 0.9) 0 9%,
           transparent 9.5%
+        ),
+        radial-gradient(
+          circle at 81% 20%,
+          rgba(255, 255, 255, 0.85) 0 8%,
+          transparent 8.5%
         ),
         linear-gradient(
           180deg,
-          #a9ddf7 0%,
+          #a8def8 0%,
           #eaf8ff 67%,
-          #9fd176 67%,
-          #72ad57 100%
+          #a0d177 67%,
+          #73ad57 100%
         );
     }
 
     .sun {
       position: absolute;
       top: 22px;
-      right: 26px;
+      right: 27px;
 
       width: 48px;
       height: 48px;
@@ -229,18 +260,18 @@
       background: #ffe477;
 
       box-shadow:
-        0 0 25px rgba(255, 221, 98, 0.75);
+        0 0 25px rgba(255, 220, 95, 0.8);
     }
 
     .tree {
       position: absolute;
-      bottom: 48px;
+      bottom: 49px;
 
       width: 13px;
       height: 96px;
 
-      background: #755036;
       border-radius: 8px;
+      background: #755037;
 
       opacity: 0.75;
     }
@@ -266,11 +297,11 @@
     }
 
     .tree-left {
-      left: 30px;
+      left: 29px;
     }
 
     .tree-right {
-      right: 28px;
+      right: 29px;
       transform: scale(0.87);
     }
 
@@ -307,27 +338,6 @@
       pointer-events: none;
     }
 
-    .player.hit {
-      animation: playerHit 0.25s ease;
-    }
-
-    @keyframes playerHit {
-      0% {
-        filter: none;
-      }
-
-      50% {
-        filter:
-          drop-shadow(0 0 10px red)
-          saturate(2);
-        transform: translateX(5px);
-      }
-
-      100% {
-        filter: none;
-      }
-    }
-
     .squirrel {
       position: absolute;
       right: 16px;
@@ -354,7 +364,7 @@
       background:
         repeating-linear-gradient(
           45deg,
-          #bc794e 0 8px,
+          #bb784d 0 8px,
           #db9862 8px 16px
         );
 
@@ -377,6 +387,26 @@
       border-radius: 28px 28px 0 0;
     }
 
+    .player.hit {
+      animation: player-hit 0.28s ease;
+    }
+
+    @keyframes player-hit {
+      0% {
+        filter: none;
+      }
+
+      50% {
+        filter:
+          drop-shadow(0 0 12px #e13030)
+          saturate(2);
+      }
+
+      100% {
+        filter: none;
+      }
+    }
+
     .falling-item {
       position: absolute;
       z-index: 10;
@@ -397,14 +427,31 @@
 
     .falling-item.acorn {
       animation:
-        acornSpin 1.1s linear infinite;
+        acorn-spin 1s linear infinite;
     }
 
     .falling-item.chestnut {
       font-size: 38px;
 
       animation:
-        chestnutWobble 0.45s ease-in-out
+        item-wobble 0.38s ease-in-out
+        infinite alternate;
+    }
+
+    .falling-item.heart {
+      z-index: 14;
+
+      width: 56px;
+      height: 56px;
+
+      font-size: 47px;
+
+      filter:
+        drop-shadow(0 0 7px #ff5c88)
+        drop-shadow(0 5px 3px rgba(0, 0, 0, 0.2));
+
+      animation:
+        heart-pulse 0.55s ease-in-out
         infinite alternate;
     }
 
@@ -418,7 +465,7 @@
       pointer-events: none;
     }
 
-    @keyframes acornSpin {
+    @keyframes acorn-spin {
       from {
         transform: rotate(-12deg);
       }
@@ -428,13 +475,23 @@
       }
     }
 
-    @keyframes chestnutWobble {
+    @keyframes item-wobble {
       from {
         transform: rotate(-14deg);
       }
 
       to {
         transform: rotate(14deg);
+      }
+    }
+
+    @keyframes heart-pulse {
+      from {
+        transform: scale(0.88) rotate(-6deg);
+      }
+
+      to {
+        transform: scale(1.18) rotate(6deg);
       }
     }
 
@@ -448,18 +505,23 @@
       pointer-events: none;
 
       animation:
-        floatingScore 0.7s ease-out forwards;
+        score-float 0.72s ease-out forwards;
     }
 
     .floating-score.plus {
-      color: #247c32;
+      color: #237c31;
     }
 
     .floating-score.minus {
       color: #d83e3e;
     }
 
-    @keyframes floatingScore {
+    .floating-score.love {
+      color: #f02f6d;
+      font-size: 1.5rem;
+    }
+
+    @keyframes score-float {
       0% {
         opacity: 1;
         transform:
@@ -470,7 +532,7 @@
       100% {
         opacity: 0;
         transform:
-          translateY(-58px)
+          translateY(-60px)
           scale(1.25);
       }
     }
@@ -485,11 +547,12 @@
       justify-content: center;
       align-items: center;
 
-      padding: 25px;
+      padding: 24px;
+
       text-align: center;
 
       background:
-        rgba(255, 252, 238, 0.91);
+        rgba(255, 252, 238, 0.92);
 
       backdrop-filter: blur(4px);
     }
@@ -500,31 +563,46 @@
 
     .screen-icon {
       margin-bottom: 7px;
+
       font-size: 4rem;
       line-height: 1;
     }
 
-    .screen h2 {
-      margin: 5px 0 11px;
-      font-size: 1.7rem;
-    }
-
-    .screen p {
-      margin: 4px 0;
-      line-height: 1.55;
-    }
-
     .start-acorn {
-      width: 78px;
-      height: 78px;
+      width: 80px;
+      height: 80px;
+
       object-fit: contain;
 
       filter:
         drop-shadow(0 5px 4px rgba(0, 0, 0, 0.18));
     }
 
+    .screen h2 {
+      margin: 6px 0 11px;
+
+      font-size: 1.7rem;
+    }
+
+    .screen p {
+      margin: 4px 0;
+
+      line-height: 1.55;
+    }
+
+    .heart-notice {
+      margin-top: 10px !important;
+      padding: 8px 13px;
+
+      color: #c9275d;
+      background: #ffe3ec;
+      border-radius: 12px;
+
+      font-weight: 900;
+    }
+
     .primary-button {
-      min-width: 174px;
+      min-width: 180px;
       margin-top: 17px;
       padding: 13px 22px;
 
@@ -577,6 +655,7 @@
     .control-button.active,
     .control-button:active {
       background: #68402d;
+
       transform: translateY(2px);
 
       box-shadow:
@@ -587,37 +666,37 @@
       margin: 10px 0 0;
 
       text-align: center;
-
       color: #796052;
+
       font-size: 0.78rem;
       line-height: 1.5;
     }
 
     @media (max-width: 430px) {
       body {
-        padding: 7px;
+        padding: 6px;
       }
 
-      .game-container {
-        padding: 11px;
+      .game-wrapper {
+        padding: 10px;
         border-radius: 19px;
       }
 
       .description {
-        font-size: 0.82rem;
+        font-size: 0.81rem;
       }
 
       .game-area {
         height: 59vh;
-        min-height: 400px;
+        min-height: 410px;
       }
 
       .difficulty-button {
-        padding: 9px 4px;
+        padding: 8px 3px;
       }
 
       .status-value {
-        font-size: 0.87rem;
+        font-size: 0.84rem;
       }
     }
   </style>
@@ -625,13 +704,13 @@
 
 <body>
 
-  <main class="game-container">
+  <main class="game-wrapper">
 
-    <h1>🐿️ 다람쥐의 도토리 대작전</h1>
+    <h1>🐿️ 이화 다람쥐의 도토리 대작전</h1>
 
     <p class="description">
-      도토리를 바구니에 담아 50점을 만드세요.<br>
-      밤을 받으면 점수가 1점 줄어들어요!
+      도토리 50개를 바구니에 담으세요.<br>
+      밤은 감점, 단 한 번 떨어지는 하트는 최종 치트키!
     </p>
 
     <div class="difficulty-title">
@@ -645,8 +724,8 @@
         class="difficulty-button"
         data-difficulty="easy"
       >
-        하<br>
-        <small>천천히</small>
+        하
+        <small>보통</small>
       </button>
 
       <button
@@ -654,8 +733,8 @@
         class="difficulty-button selected"
         data-difficulty="normal"
       >
-        중<br>
-        <small>보통</small>
+        중
+        <small>빠르게</small>
       </button>
 
       <button
@@ -663,8 +742,8 @@
         class="difficulty-button"
         data-difficulty="hard"
       >
-        상<br>
-        <small>빠르게</small>
+        상
+        <small>완전 빠르게</small>
       </button>
 
     </section>
@@ -672,7 +751,10 @@
     <section class="status-board">
 
       <div class="status-card">
-        <span class="status-name">도토리 점수</span>
+        <span class="status-label">
+          도토리 점수
+        </span>
+
         <span
           class="status-value"
           id="scoreValue"
@@ -682,7 +764,10 @@
       </div>
 
       <div class="status-card">
-        <span class="status-name">난이도</span>
+        <span class="status-label">
+          난이도
+        </span>
+
         <span
           class="status-value"
           id="difficultyValue"
@@ -692,7 +777,10 @@
       </div>
 
       <div class="status-card">
-        <span class="status-name">시간</span>
+        <span class="status-label">
+          플레이 시간
+        </span>
+
         <span
           class="status-value"
           id="timeValue"
@@ -703,7 +791,7 @@
 
     </section>
 
-    <div class="progress-header">
+    <div class="progress-heading">
       <span>목표 달성도</span>
       <span id="progressText">0%</span>
     </div>
@@ -745,17 +833,17 @@
         <h2>도토리 50개 모으기</h2>
 
         <p>
-          도토리 획득:
+          도토리를 받으면
           <strong>+1점</strong>
         </p>
 
         <p>
-          밤 획득:
+          밤을 받으면
           <strong>-1점</strong>
         </p>
 
-        <p>
-          바구니를 좌우로 움직여 주세요.
+        <p class="heart-notice">
+          ❤️ 하트를 받으면 즉시 클리어!
         </p>
 
         <button
@@ -773,11 +861,19 @@
         id="resultScreen"
       >
 
-        <div class="screen-icon">🎉🐿️🎉</div>
+        <div
+          class="screen-icon"
+          id="resultIcon"
+        >
+          🎉🐿️🎉
+        </div>
 
-        <h2>도토리 50개 성공!</h2>
+        <h2 id="resultTitle">
+          도토리 50개 성공!
+        </h2>
 
         <p id="resultMessage"></p>
+
         <p id="bestMessage"></p>
 
         <button
@@ -798,6 +894,7 @@
         type="button"
         class="control-button"
         id="leftButton"
+        aria-label="왼쪽으로 이동"
       >
         ◀
       </button>
@@ -806,6 +903,7 @@
         type="button"
         class="control-button"
         id="rightButton"
+        aria-label="오른쪽으로 이동"
       >
         ▶
       </button>
@@ -827,26 +925,32 @@
     const difficultySettings = {
       easy: {
         label: "하",
-        minimumSpeed: 105,
-        maximumSpeed: 145,
-        spawnInterval: 880,
-        chestnutChance: 0.2
+        description: "보통",
+        minimumSpeed: 180,
+        maximumSpeed: 250,
+        spawnInterval: 590,
+        chestnutChance: 0.25,
+        heartSpeed: 205
       },
 
       normal: {
         label: "중",
-        minimumSpeed: 165,
-        maximumSpeed: 225,
-        spawnInterval: 620,
-        chestnutChance: 0.3
+        description: "빠르게",
+        minimumSpeed: 285,
+        maximumSpeed: 390,
+        spawnInterval: 410,
+        chestnutChance: 0.34,
+        heartSpeed: 310
       },
 
       hard: {
         label: "상",
-        minimumSpeed: 250,
-        maximumSpeed: 345,
-        spawnInterval: 420,
-        chestnutChance: 0.38
+        description: "완전 빠르게",
+        minimumSpeed: 425,
+        maximumSpeed: 570,
+        spawnInterval: 250,
+        chestnutChance: 0.43,
+        heartSpeed: 445
       }
     };
 
@@ -878,6 +982,12 @@
 
     const resultScreen =
       document.getElementById("resultScreen");
+
+    const resultIcon =
+      document.getElementById("resultIcon");
+
+    const resultTitle =
+      document.getElementById("resultTitle");
 
     const resultMessage =
       document.getElementById(
@@ -916,6 +1026,7 @@
 
     let startTime = 0;
     let elapsedTime = 0;
+
     let previousFrameTime = 0;
     let previousSpawnTime = 0;
 
@@ -924,6 +1035,11 @@
     let fallingItems = [];
 
     let dragging = false;
+
+    let heartHasAppeared = false;
+    let heartDropTime = 0;
+
+    let clearedWithHeart = false;
 
     function updatePlayerPosition() {
       const maximumX =
@@ -953,15 +1069,20 @@
       scoreValue.textContent =
         `${score} / ${TARGET_SCORE}`;
 
-      difficultyValue.textContent =
+      const selected =
         difficultySettings[
           selectedDifficulty
-        ].label;
+        ];
+
+      difficultyValue.textContent =
+        selected.label +
+        " · " +
+        selected.description;
 
       timeValue.textContent =
         `${elapsedTime.toFixed(1)}초`;
 
-      const progress =
+      const percentage =
         Math.min(
           100,
           Math.round(
@@ -970,10 +1091,10 @@
         );
 
       progressText.textContent =
-        progress + "%";
+        percentage + "%";
 
       progressFill.style.width =
-        progress + "%";
+        percentage + "%";
     }
 
     function removeAllItems() {
@@ -986,12 +1107,24 @@
 
     function resetGame() {
       gameRunning = false;
+
       score = 0;
       elapsedTime = 0;
+
       movementDirection = 0;
 
       previousFrameTime = 0;
       previousSpawnTime = 0;
+
+      heartHasAppeared = false;
+      clearedWithHeart = false;
+
+      /*
+        하트는 게임 시작 후
+        8초에서 18초 사이에 딱 한 번 등장
+      */
+      heartDropTime =
+        8000 + Math.random() * 10000;
 
       if (animationFrameId !== null) {
         cancelAnimationFrame(
@@ -1021,6 +1154,7 @@
       gameRunning = true;
 
       startTime = performance.now();
+
       previousFrameTime = startTime;
       previousSpawnTime = startTime;
 
@@ -1028,9 +1162,16 @@
         requestAnimationFrame(gameLoop);
     }
 
-    function endGame() {
+    function endGame(
+      heartClear = false
+    ) {
+      if (!gameRunning) {
+        return;
+      }
+
       gameRunning = false;
       movementDirection = 0;
+      clearedWithHeart = heartClear;
 
       if (animationFrameId !== null) {
         cancelAnimationFrame(
@@ -1042,49 +1183,27 @@
 
       removeAllItems();
 
-      const storageKey =
-        "acornGameBest_" +
-        selectedDifficulty;
+      if (heartClear) {
+        resultIcon.textContent = "❤️🐿️❤️";
 
-      const savedRecord =
-        Number(
-          localStorage.getItem(storageKey)
-        );
+        resultTitle.textContent =
+          "하트 치트키 성공!";
 
-      const newRecord =
-        !savedRecord ||
-        elapsedTime < savedRecord;
+        resultMessage.textContent =
+          "최종 치트키를 획득하여 즉시 클리어했습니다!";
 
-      if (newRecord) {
-        localStorage.setItem(
-          storageKey,
-          elapsedTime.toString()
-        );
-      }
-
-      const bestTime =
-        newRecord
-          ? elapsedTime
-          : savedRecord;
-
-      resultMessage.textContent =
-        difficultySettings[
-          selectedDifficulty
-        ].label +
-        " 난이도를 " +
-        elapsedTime.toFixed(1) +
-        "초 만에 성공했어요!";
-
-      if (newRecord) {
         bestMessage.textContent =
-          "🏆 새로운 최고 기록: " +
-          elapsedTime.toFixed(1) +
-          "초";
+          `하트를 ${elapsedTime.toFixed(1)}초 만에 잡았어요.`;
       } else {
-        bestMessage.textContent =
-          "최고 기록: " +
-          bestTime.toFixed(1) +
-          "초";
+        resultIcon.textContent = "🎉🐿️🎉";
+
+        resultTitle.textContent =
+          "도토리 50개 성공!";
+
+        resultMessage.textContent =
+          `${elapsedTime.toFixed(1)}초 만에 목표를 달성했어요!`;
+
+        updateBestRecord();
       }
 
       resultScreen.classList.remove(
@@ -1098,7 +1217,39 @@
       );
     }
 
-    function createFallingItem() {
+    function updateBestRecord() {
+      const storageKey =
+        "acornGameBest_" +
+        selectedDifficulty;
+
+      const savedRecord =
+        Number(
+          localStorage.getItem(storageKey)
+        );
+
+      const isNewRecord =
+        !savedRecord ||
+        elapsedTime < savedRecord;
+
+      if (isNewRecord) {
+        localStorage.setItem(
+          storageKey,
+          elapsedTime.toString()
+        );
+
+        bestMessage.textContent =
+          "🏆 새로운 최고 기록: " +
+          elapsedTime.toFixed(1) +
+          "초";
+      } else {
+        bestMessage.textContent =
+          "최고 기록: " +
+          savedRecord.toFixed(1) +
+          "초";
+      }
+    }
+
+    function createRegularItem() {
       const settings =
         difficultySettings[
           selectedDifficulty
@@ -1151,24 +1302,76 @@
         );
 
       element.style.left = x + "px";
-      element.style.top = "-55px";
+      element.style.top = "-58px";
 
       gameArea.appendChild(element);
 
       fallingItems.push({
         element: element,
+
         kind:
           isChestnut
             ? "chestnut"
             : "acorn",
+
         x: x,
-        y: -55,
+        y: -58,
+
         size: itemSize,
         speed: speed
       });
     }
 
-    function overlaps(first, second) {
+    function createHeart() {
+      if (heartHasAppeared) {
+        return;
+      }
+
+      heartHasAppeared = true;
+
+      const settings =
+        difficultySettings[
+          selectedDifficulty
+        ];
+
+      const element =
+        document.createElement("div");
+
+      element.className =
+        "falling-item heart";
+
+      element.textContent = "❤️";
+
+      const itemSize = 56;
+
+      const maximumX =
+        gameArea.clientWidth -
+        itemSize;
+
+      const x =
+        Math.random() * maximumX;
+
+      element.style.left = x + "px";
+      element.style.top = "-65px";
+
+      gameArea.appendChild(element);
+
+      fallingItems.push({
+        element: element,
+        kind: "heart",
+
+        x: x,
+        y: -65,
+
+        size: itemSize,
+        speed: settings.heartSpeed
+      });
+    }
+
+    function rectanglesOverlap(
+      first,
+      second
+    ) {
       return (
         first.left < second.right &&
         first.right > second.left &&
@@ -1187,7 +1390,8 @@
         document.createElement("div");
 
       effect.className =
-        "floating-score " + styleName;
+        "floating-score " +
+        styleName;
 
       effect.textContent = text;
       effect.style.left = x + "px";
@@ -1197,10 +1401,22 @@
 
       setTimeout(() => {
         effect.remove();
-      }, 720);
+      }, 740);
     }
 
     function collectItem(item) {
+      if (item.kind === "heart") {
+        showScoreEffect(
+          "치트키!",
+          item.x,
+          item.y,
+          "love"
+        );
+
+        endGame(true);
+        return;
+      }
+
       if (item.kind === "acorn") {
         score += 1;
 
@@ -1210,8 +1426,11 @@
           item.y,
           "plus"
         );
-      } else {
-        score = Math.max(0, score - 1);
+      }
+
+      if (item.kind === "chestnut") {
+        score =
+          Math.max(0, score - 1);
 
         showScoreEffect(
           "-1",
@@ -1228,18 +1447,20 @@
 
         setTimeout(() => {
           player.classList.remove("hit");
-        }, 260);
+        }, 280);
       }
 
       updateStatus();
 
       if (score >= TARGET_SCORE) {
-        endGame();
+        endGame(false);
       }
     }
 
-    function movePlayer(deltaSeconds) {
-      const playerSpeed = 350;
+    function movePlayer(
+      deltaSeconds
+    ) {
+      const playerSpeed = 390;
 
       playerX +=
         movementDirection *
@@ -1266,10 +1487,10 @@
           playerRectangle.right - 2,
 
         top:
-          playerRectangle.bottom - 44,
+          playerRectangle.bottom - 45,
 
         bottom:
-          playerRectangle.bottom - 3
+          playerRectangle.bottom - 2
       };
 
       for (
@@ -1284,7 +1505,8 @@
           fallingItems[index];
 
         item.y +=
-          item.speed * deltaSeconds;
+          item.speed *
+          deltaSeconds;
 
         item.element.style.top =
           item.y + "px";
@@ -1293,13 +1515,13 @@
           left:
             areaRectangle.left +
             item.x +
-            6,
+            5,
 
           right:
             areaRectangle.left +
             item.x +
             item.size -
-            6,
+            5,
 
           top:
             areaRectangle.top +
@@ -1314,7 +1536,7 @@
         };
 
         if (
-          overlaps(
+          rectanglesOverlap(
             itemRectangle,
             basketRectangle
           )
@@ -1337,7 +1559,7 @@
 
         if (
           item.y >
-          gameArea.clientHeight + 60
+          gameArea.clientHeight + 70
         ) {
           item.element.remove();
 
@@ -1354,7 +1576,7 @@
         return;
       }
 
-      const elapsedSinceFrame =
+      const frameDifference =
         Math.min(
           34,
           currentTime -
@@ -1362,12 +1584,14 @@
         );
 
       const deltaSeconds =
-        elapsedSinceFrame / 1000;
+        frameDifference / 1000;
 
-      previousFrameTime = currentTime;
+      previousFrameTime =
+        currentTime;
 
       elapsedTime =
-        (currentTime - startTime) / 1000;
+        (currentTime - startTime) /
+        1000;
 
       const settings =
         difficultySettings[
@@ -1379,12 +1603,29 @@
         previousSpawnTime >=
         settings.spawnInterval
       ) {
-        createFallingItem();
-        previousSpawnTime = currentTime;
+        createRegularItem();
+
+        previousSpawnTime =
+          currentTime;
+      }
+
+      const gameTimeMilliseconds =
+        currentTime - startTime;
+
+      if (
+        !heartHasAppeared &&
+        gameTimeMilliseconds >=
+          heartDropTime
+      ) {
+        createHeart();
       }
 
       movePlayer(deltaSeconds);
-      moveFallingItems(deltaSeconds);
+
+      moveFallingItems(
+        deltaSeconds
+      );
+
       updateStatus();
 
       if (gameRunning) {
@@ -1395,7 +1636,7 @@
       }
     }
 
-    function chooseDifficulty(
+    function selectDifficulty(
       difficulty
     ) {
       if (gameRunning) {
@@ -1418,17 +1659,23 @@
       updateStatus();
     }
 
-    function startMoving(
+    function beginMovement(
       direction,
       button
     ) {
       movementDirection = direction;
-      button.classList.add("active");
+
+      button.classList.add(
+        "active"
+      );
     }
 
-    function stopMoving(button) {
+    function stopMovement(button) {
       movementDirection = 0;
-      button.classList.remove("active");
+
+      button.classList.remove(
+        "active"
+      );
     }
 
     function addMovementButton(
@@ -1444,7 +1691,7 @@
             event.pointerId
           );
 
-          startMoving(
+          beginMovement(
             direction,
             button
           );
@@ -1454,26 +1701,28 @@
       button.addEventListener(
         "pointerup",
         () => {
-          stopMoving(button);
+          stopMovement(button);
         }
       );
 
       button.addEventListener(
         "pointercancel",
         () => {
-          stopMoving(button);
+          stopMovement(button);
         }
       );
 
       button.addEventListener(
         "pointerleave",
         () => {
-          stopMoving(button);
+          stopMovement(button);
         }
       );
     }
 
-    function movePlayerToPointer(event) {
+    function movePlayerToPointer(
+      event
+    ) {
       const areaRectangle =
         gameArea.getBoundingClientRect();
 
@@ -1493,7 +1742,7 @@
         button.addEventListener(
           "click",
           () => {
-            chooseDifficulty(
+            selectDifficulty(
               button.dataset.difficulty
             );
           }
@@ -1522,6 +1771,7 @@
           key === "a"
         ) {
           event.preventDefault();
+
           movementDirection = -1;
         }
 
@@ -1530,6 +1780,7 @@
           key === "d"
         ) {
           event.preventDefault();
+
           movementDirection = 1;
         }
 
@@ -1538,6 +1789,7 @@
           !gameRunning
         ) {
           event.preventDefault();
+
           startGame();
         }
       }
